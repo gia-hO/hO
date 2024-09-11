@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>QRコードリーダー</title>
+  
+  <!-- html5-qrcode ライブラリの読み込み -->
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    #qr-reader {
+      width: 100%;
+      max-width: 400px; /* 最大幅を400pxに制限 */
+      height: auto;
+      aspect-ratio: 1; /* 正方形に保つ */
+      margin-bottom: 20px;
+    }
+    
+    #qr-reader-results {
+      width: 90%;
+      max-width: 400px; /* 結果の表示部分も最大幅を設定 */
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    
+    img {
+      width: 90%;
+      max-width: 400px; /* 画像の最大幅を設定 */
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>QRコードリーダー</h1>
+
+  <!-- QRコードをスキャンする領域 -->
+  <div id="qr-reader"></div>
+  
+  <!-- QRコードの内容を表示する領域 -->
+  <div id="qr-reader-results">QRコードをスキャンしてください</div>
+
+  <!-- 任意の画像を表示 -->
+  <img src="your-image-path.jpg" alt="任意の画像">
+
+  <script>
+    // QRコードが読み取られたときに呼ばれる関数
+    function onScanSuccess(qrCodeMessage) {
+      document.getElementById('qr-reader-results').innerText = "QRコードの内容: " + qrCodeMessage;
+    }
+
+    // QRコードリーダーを初期化
+    var html5QrCode = new Html5Qrcode("qr-reader");
+
+    // QRコードの読み取りを開始
+    html5QrCode.start(
+      { facingMode: "environment" },  // リアカメラを使用
+      {
+        fps: 10,    // 1秒あたりのフレーム数
+        qrbox: { width: 250, height: 250 }  // QRコードのスキャン範囲
+      },
+      onScanSuccess  // 成功時に実行される関数
+    )
+    .catch(err => {
+      // カメラへのアクセスに失敗した場合のエラー処理
+      console.error("QRコードの読み取りに失敗しました: ", err);
+    });
+  </script>
+
+</body>
+</html>
